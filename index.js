@@ -10,6 +10,18 @@
  *  day - день місяця.
  */
 function getDateDetails(date) {
+  if(typeof date.getTime === 'function') {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    return {
+      year,
+      month,
+      day,
+    };
+  } else {
+    return "Помилка: вхідне значення має бути об'єктом Date";
+  }
   // Перевірка, чи є вхідне значення об'єктом Date,це можно зробити перевіривши чи є date.getTime по типу функція .
   // Якщо date не є об'єктом Date, повертаємо рядок
   // "Помилка: вхідне значення має бути об'єктом Date"
@@ -31,7 +43,16 @@ console.log(getDateDetails(new Date("2023-12-25T00:00:00Z")));
  * Повертає об'єкт Date з встановленою датою, якщо вхідні дані вірні. Якщо ні, виводить повідомлення про помилку.
  */
 function setDateDetails(date, isoString) {
-  // Перевірка, чи є вхідне значення об'єктом Date,це можно зробити перевіривши чи є date.getTime по типу функція .
+  if(typeof date.getTime !== 'function') {
+    return "Помилка: вхідне значення має бути об'єктом Date";
+  };
+  if(typeof Date.parse(isoString) !== "number") {
+    return "Помилка: недійсний ISO рядок";
+  };
+  date.setTime(Date.parse(isoString)); 
+  return date   
+  
+  // Перевірка, чи є вхідне значення об'єктом Date,це можнa зробити перевіривши чи є date.getTime по типу функція .
   // Якщо date не є об'єктом Date, повертаємо рядок
   // "Помилка: вхідне значення має бути об'єктом Date"
   // Перевірка, чи є вхідний ISO рядок валідним, отримавши дату з рядка та перевірити чи є результат числом,
