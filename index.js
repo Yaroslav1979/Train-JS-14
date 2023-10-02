@@ -75,6 +75,10 @@ console.log(setDateDetails(date, "2023-12-25T00:00:00Z"));
  * Повертає рядок з датою в UTC форматі, якщо вхідне значення є дійсним об'єктом Date. Якщо ні, виводить повідомлення про помилку.
  */
 function dateToUTC(date) {
+  if(typeof date.getTime !== 'function') {
+    return "Помилка: вхідне значення має бути об'єктом Date";
+  };
+  return date.toUTCString()
   // Перевірка, чи є вхідне значення об'єктом Date,це можно зробити перевіривши чи є date.getTime по типу функція .
   // Якщо date не є об'єктом Date, повертаємо рядок
   // "Помилка: вхідне значення має бути об'єктом Date"
@@ -98,6 +102,14 @@ console.log(dateToUTC(new Date()));
  * Повертає об'єкт Date з встановленим часом, якщо вхідні дані вірні. Якщо ні, виводить повідомлення про помилку.
  */
 function setSpecificTime(date, hours, minutes, seconds, milliseconds) {
+  if(typeof date.getTime !== 'function') {
+    return "Помилка: вхідне значення має бути об'єктом Date";
+  };
+   date.setHours(hours, minutes, seconds, milliseconds);
+   const Date = date.toISOString();
+  return Date;
+
+
   // Перевірка, чи є вхідне значення об'єктом Date,це можно зробити перевіривши чи є date.getTime по типу функція .
   // Якщо date не є об'єктом Date, повертаємо рядок
   // "Помилка: вхідне значення має бути об'єктом Date"
@@ -127,6 +139,31 @@ console.log(
  * }
  */
 function nextNewYear() {
+  const dateToday = new Date();
+  const year = dateToday.getFullYear();
+  const newYear = new Date(year + 1, 0, 1, 0, 0, 0, 0);
+  const diff = newYear - dateToday;
+  // diff.getDate(diff / (1000 * 60 * 60 * 24));
+  // const days = diff / (1000 * 60 * 60 * 24);
+  // const hours = (diff / (1000 * 60 * 60)) % 24;
+  // const minutes =(diff / (1000 * 60)) % 60;
+  // const seconds = (diff / 1000) % 60;
+  // const milliseconds = diff % 1000;
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+  const milliseconds = diff % 1000;
+
+  return {
+    days,
+    hours,
+    minutes,
+    seconds,
+    milliseconds
+  };
+  // Секунди:(diff / 1000) % 60;
+  // Мілісекунди:  diff % 1000;
   // Створюєму змінну в яку записуємо поточну дату
   // Визначення поточного року.
   // Визначення дати наступного Нового року. Для цього створюємо новий об`єкт Date в якому збільшуємо поточний рік на 1, встановлюємо місяць на 0 а дату на 1
@@ -157,9 +194,17 @@ console.log(nextNewYear());
  * }
  */
 function isLeapYear(year) {
+  if (typeof year !== "number") {
+    return "Значення 'year' не є числом"
+  };
+  if ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) {
+    return {year: year, isLeap: true };
+  } else {
+    return {year: year, isLeap: false };
+  }
   // Перевірка, чи є вхідне значення числом якщо ні повертаємо рядок .
   // Перевірка, чи є рік високосним.
-  // Високосним вважається рік, який ділиться націло на 4
+  // Високосним вважається рік, який ділиться націло на 4 (а ще також коли не ділиться на 100 націло, якщо тільки не ділиться на 400 (сам цього не знав до сьогоднішнього дня))
   // Повертаємо об'єкт з роком та інформацією про те, чи є він високосним.
 }
 console.log("Завдання: 6 ==============================");
@@ -182,6 +227,18 @@ console.log(isLeapYear(2020));
  * }
  */
 function addDays(date, days) {
+  if(typeof date.getTime !== 'function') {
+    return "Помилка: вхідне значення має бути об'єктом Date"
+  };
+  if (typeof  days !== "number") {
+    return "Помилка: кількість днів має бути числом"
+  };
+  const inputDate =  date.getTime();
+  const addDays = inputDate + days*24*60*60*1000;
+  const resultDate = new Date(addDays);
+  return {inputDate: date.toISOString(), addedDays: days, resultDate: resultDate.toISOString() }
+
+
   // Перевірка, чи є вхідне значення об'єктом Date,це можно зробити перевіривши чи є date.getTime по типу функція .
   // Якщо date не є об'єктом Date, повертаємо рядок
   // "Помилка: вхідне значення має бути об'єктом Date"
@@ -193,6 +250,7 @@ function addDays(date, days) {
   // Збереження результуючої дати для виведення в форматі ISO.
   // Повертаємо об'єкт з початковою датою, кількістю доданих днів та результуючою датою.
 }
+
 
 console.log("Завдання: 7 ==============================");
 
